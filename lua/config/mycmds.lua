@@ -1,0 +1,5 @@
+vim.api.nvim_create_user_command("Hello", function()
+  pcall(function()
+    vim.notify("Hello World")
+  end)
+end, {})

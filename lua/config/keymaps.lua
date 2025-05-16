@@ -24,6 +24,9 @@ vim.keymap.set("i", "<D-Left>", "<ESC>I")
 vim.keymap.set("n", "<D-Right>", "$")
 vim.keymap.set("n", "<D-Left>", "^")
 
+-- comment the line
+vim.keymap.set({ "n", "v", "i" }, "<D-/>", "<ESC>gcc", { remap = true })
+
 -- command-w close current buffer
 vim.keymap.set({ "i", "n", "v" }, "<D-w>", "<CMD>bd<CR>")
 
