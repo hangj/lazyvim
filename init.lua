@@ -1,7 +1,7 @@
 local argv = vim.v.argv
 
 local cwd = vim.fn.getcwd()
-vim.api.nvim_set_current_dir(vim.env.PWD)
+-- vim.api.nvim_set_current_dir(vim.env.PWD)
 
 local set = vim.keymap.set
 
