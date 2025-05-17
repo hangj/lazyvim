@@ -28,7 +28,10 @@ vim.keymap.set("n", "<D-Left>", "^")
 vim.keymap.set({ "n", "v", "i" }, "<D-/>", "<ESC>gcc", { remap = true })
 
 -- command-w close current buffer
-vim.keymap.set({ "i", "n", "v" }, "<D-w>", "<CMD>bd<CR>")
+-- `<cmd>bd<cr>` does not work, don't know why
+vim.keymap.set({ "i", "n", "v" }, "<D-w>", function()
+  Snacks.bufdelete()
+end)
 
 -- Ctrl-Tab goto next buffer
 vim.keymap.set({ "i", "n", "v" }, "<C-Tab>", "<CMD>bnext<CR>")

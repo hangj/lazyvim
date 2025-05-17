@@ -1,18 +1,13 @@
 local argv = vim.v.argv
 
 local cwd = vim.fn.getcwd()
--- vim.api.nvim_set_current_dir(vim.env.PWD)
+vim.api.nvim_set_current_dir(vim.env.PWD)
 
+-- log al the keymaps
 local set = vim.keymap.set
-
 local log = io.open(vim.fs.abspath("~/dev/tmp/nvim-keymap.log"), "w+")
 if log then
   vim.keymap.set = function(mode, key, action, opts, ...)
-    --    if key == "<leader>ff" then
-    --      log:write(debug.traceback())
-    --      log:write("\n")
-    --    end
-    log:write(string.format("%q, %q, %q, %q\n", mode, key, action, opts))
     return set(mode, key, action, opts, ...)
   end
 
