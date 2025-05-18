@@ -15,6 +15,11 @@ if log then
   -- log:write(vim.print(vim.fn.api_info()))
 end
 
+-- get all files and directories
+-- https://stackoverflow.com/a/76675386/1936057
+-- local cwDir = vim.fn.getcwd()
+-- local cwdContent = vim.split(vim.fn.glob(cwDir .. "/*"), '\n', {trimempty=true})
+
 -- line number
 -- vim.fn.line('.')
 -- vim.fn.col('.')
