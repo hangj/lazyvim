@@ -21,10 +21,13 @@ vim.api.nvim_set_keymap("v", "<D-v>", "<C-R>+", { noremap = true, silent = true 
 -- command-left/right goto start/end of current line
 vim.keymap.set("i", "<D-Right>", "<ESC>A")
 vim.keymap.set("i", "<D-Left>", "<ESC>I")
+vim.keymap.set("i", "<S-D-Right>", "<ESC>lv$")
+vim.keymap.set("i", "<S-D-Left>", "<ESC>v^")
 vim.keymap.set("n", "<D-Right>", "$")
 vim.keymap.set("n", "<D-Left>", "^")
 vim.keymap.set("n", "<S-D-Right>", "v$")
 vim.keymap.set("n", "<S-D-Left>", "v^")
+
 vim.keymap.set("v", "<S-D-Right>", "$")
 vim.keymap.set("v", "<S-D-Left>", "^")
 vim.keymap.set("v", "<S-A-Right>", "e")
@@ -32,9 +35,8 @@ vim.keymap.set("v", "<S-A-Left>", "b")
 
 vim.keymap.set("i", "<S-D-Cr>", "<ESC>O")
 
--- comment the line
-vim.keymap.set({ "n", "v", "i" }, "<D-/>", "<ESC>gcc", { remap = true })
-
+vim.keymap.set({ "n", "i" }, "<D-/>", "<ESC>gcc", { remap = true }) -- comment line
+vim.keymap.set("v", "<D-/>", "gc", { remap = true }) -- comment code block
 -- command-w close current buffer
 -- `<cmd>bd<cr>` does not work, don't know why
 vim.keymap.set({ "i", "n", "v" }, "<D-w>", function()
@@ -42,15 +44,33 @@ vim.keymap.set({ "i", "n", "v" }, "<D-w>", function()
 end)
 
 -- Ctrl-Tab goto next buffer
-vim.keymap.set({ "i", "n", "v" }, "<C-Tab>", "<CMD>bnext<CR>")
-vim.keymap.set({ "i", "n", "v" }, "<C-S-Tab>", "<CMD>bprevious<CR>")
+vim.keymap.set({ "i", "n", "v" }, "<A-D-Right>", "<CMD>bnext<CR>")
+vim.keymap.set({ "i", "n", "v" }, "<A-D-Left>", "<CMD>bprevious<CR>")
+vim.keymap.set({ "i", "n", "v" }, "<C-Tab>", "<CMD>e #<CR>")
 
--- command-p
-vim.keymap.set("n", "<D-p>", LazyVim.pick("files"))
-vim.keymap.set("n", "<D-S-f>", LazyVim.pick("live_grep"))
+-- command-p search from cwd
+vim.keymap.set({ "n", "i", "v" }, "<D-p>", LazyVim.pick("files", { root = false }))
+-- cmd-shit-f search from cwd
+vim.keymap.set({ "n", "i", "v" }, "<D-S-f>", LazyVim.pick("live_grep", { root = false }))
 -- Alt-Left
 vim.keymap.set("n", "<A-Left>", "b")
 vim.keymap.set("n", "<A-Right>", "w")
 
 -- rename the variable name
 vim.keymap.set("n", "<leader>r", vim.lsp.buf.rename)
+
+-- new file
+vim.keymap.set({ "n", "i", "v" }, "<D-t>", "<cmd>enew<cr>")
+-- reopen last closed buffer
+vim.keymap.set({ "n", "i", "v" }, "<S-D-t>", function()
+  local mrcb = MostRecentClosedBuffers
+  if #mrcb == 0 then
+    return
+  end
+  local file = mrcb[#mrcb]
+  if file == "" then
+    vim.cmd("enew")
+    return
+  end
+  vim.cmd("e " .. file)
+end)

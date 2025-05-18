@@ -12,7 +12,11 @@ Add the following code to the file
 
 ```
 function neovide
-  open -n /Applications/Neovide.app --args (realpath $argv[1])
+    set -l arr
+    for arg in $argv
+        set -a arr (realpath $arg)
+    end
+    open -n /Applications/Neovide.app --args $arr
 end
 ```
 
