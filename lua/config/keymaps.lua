@@ -23,6 +23,14 @@ vim.keymap.set("i", "<D-Right>", "<ESC>A")
 vim.keymap.set("i", "<D-Left>", "<ESC>I")
 vim.keymap.set("n", "<D-Right>", "$")
 vim.keymap.set("n", "<D-Left>", "^")
+vim.keymap.set("n", "<S-D-Right>", "v$")
+vim.keymap.set("n", "<S-D-Left>", "v^")
+vim.keymap.set("v", "<S-D-Right>", "$")
+vim.keymap.set("v", "<S-D-Left>", "^")
+vim.keymap.set("v", "<S-A-Right>", "e")
+vim.keymap.set("v", "<S-A-Left>", "b")
+
+vim.keymap.set("i", "<S-D-Cr>", "<ESC>O")
 
 -- comment the line
 vim.keymap.set({ "n", "v", "i" }, "<D-/>", "<ESC>gcc", { remap = true })
@@ -43,3 +51,6 @@ vim.keymap.set("n", "<D-S-f>", LazyVim.pick("live_grep"))
 -- Alt-Left
 vim.keymap.set("n", "<A-Left>", "b")
 vim.keymap.set("n", "<A-Right>", "w")
+
+-- rename the variable name
+vim.keymap.set("n", "<leader>r", vim.lsp.buf.rename)
