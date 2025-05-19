@@ -3,14 +3,15 @@
 A starter template for [LazyVim](https://github.com/LazyVim/LazyVim).
 Refer to the [documentation](https://lazyvim.github.io/installation) to get started.
 
-# Install Neovide
-https://neovide.dev/
+## Install Neovide
 
-# Edit ~/.config/fish/config.fish
+<https://neovide.dev/>
+
+## Edit ~/.config/fish/config.fish
 
 Add the following code to the file
 
-```
+```fish
 function neovide
     set -l arr
     for arg in $argv
@@ -20,11 +21,8 @@ function neovide
 end
 ```
 
-
 And now you can start Neovide from terminal like this:
 
 ```sh
 neovide your/project/directory
 ```
-
-

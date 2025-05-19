@@ -46,7 +46,15 @@ end)
 -- Ctrl-Tab goto next buffer
 vim.keymap.set({ "i", "n", "v" }, "<A-D-Right>", "<CMD>bnext<CR>")
 vim.keymap.set({ "i", "n", "v" }, "<A-D-Left>", "<CMD>bprevious<CR>")
-vim.keymap.set({ "i", "n", "v" }, "<C-Tab>", "<CMD>e #<CR>")
+-- vim.keymap.set({ "i", "n", "v" }, "<C-Tab>", "<CMD>e #<CR>")
+local mreb = _G.MostRecentEnteredBuffers
+vim.keymap.set({ "i", "n", "v" }, "<C-Tab>", function()
+  if #mreb < 2 then
+    return
+  end
+  local buf = mreb[#mreb - 1]
+  vim.cmd("b " .. buf)
+end)
 
 -- command-p search from cwd
 vim.keymap.set({ "n", "i", "v" }, "<D-p>", LazyVim.pick("files", { root = false }))
@@ -62,8 +70,8 @@ vim.keymap.set("n", "<leader>r", vim.lsp.buf.rename)
 -- new file
 vim.keymap.set({ "n", "i", "v" }, "<D-t>", "<cmd>enew<cr>")
 -- reopen last closed buffer
+local mrcb = MostRecentClosedBuffers
 vim.keymap.set({ "n", "i", "v" }, "<S-D-t>", function()
-  local mrcb = MostRecentClosedBuffers
   if #mrcb == 0 then
     return
   end

@@ -4,6 +4,7 @@
 
 vim.g.neovide_cursor_animation_length = 0
 vim.opt.autochdir = false
+vim.cmd("set mousescroll=ver:2,hor:0")
 
 -- disable automatic comment insertion
 -- vim.cmd("autocmd BufEnter * set formatoptions-=cro")

@@ -10,6 +10,9 @@
 _G.MostRecentClosedBuffers = _G.MostRecentClosedBuffers or {}
 local mrcb = _G.MostRecentClosedBuffers
 
+_G.MostRecentEnteredBuffers = _G.MostRecentEnteredBuffers or {}
+local mreb = _G.MostRecentEnteredBuffers
+
 local function arr_rm(arr, ele)
   local idx = nil
   for i, v in ipairs(arr) do
@@ -33,6 +36,7 @@ local function arr_append(arr, ele)
   arr[#arr + 1] = ele
 end
 
+-- https://neovim.io/doc/user/autocmd.html#_5.-events
 vim.api.nvim_create_autocmd("BufDelete", {
   group = vim.api.nvim_create_augroup("hangj_bufdelete", { clear = true }),
   callback = function(e)
@@ -47,11 +51,20 @@ vim.api.nvim_create_autocmd("BufDelete", {
     -- vim.print(e)
     -- print("fuck")
     arr_append(mrcb, e.file)
+    arr_rm(mreb, e.buf)
   end,
 })
 vim.api.nvim_create_autocmd("BufAdd", {
   group = vim.api.nvim_create_augroup("hangj_bufnew", { clear = true }),
   callback = function(e)
     arr_rm(mrcb, e.file)
+  end,
+})
+
+vim.api.nvim_create_autocmd("BufEnter", {
+  group = vim.api.nvim_create_augroup("hangj_bufenter", { clear = true }),
+  callback = function(e)
+    arr_append(mreb, e.buf)
+    -- vim.print(e)
   end,
 })
