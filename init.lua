@@ -4,16 +4,17 @@ local cwd = vim.fn.getcwd()
 vim.api.nvim_set_current_dir(vim.env.PWD)
 
 -- log al the keymaps
-local set = vim.keymap.set
-local log = io.open(vim.fs.abspath("~/dev/tmp/nvim-keymap.log"), "w+")
-if log then
-  vim.keymap.set = function(mode, key, action, opts, ...)
-    return set(mode, key, action, opts, ...)
-  end
-
-  -- log:write("api_info:\n")
-  -- log:write(vim.print(vim.fn.api_info()))
-end
+-- local set = vim.keymap.set
+-- local log = io.open(vim.fs.abspath("~/dev/tmp/nvim-keymap.log"), "w+")
+-- if log then
+--   vim.keymap.set = function(mode, key, action, opts, ...)
+--     log:write(vim.print(mode, key, action, opts, ...))
+--     return set(mode, key, action, opts, ...)
+--   end
+--
+--   -- log:write("api_info:\n")
+--   -- log:write(vim.print(vim.fn.api_info()))
+-- end
 
 -- get all files and directories
 -- https://stackoverflow.com/a/76675386/1936057

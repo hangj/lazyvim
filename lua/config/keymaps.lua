@@ -59,7 +59,10 @@ end)
 -- command-p search from cwd
 vim.keymap.set({ "n", "i", "v" }, "<D-p>", LazyVim.pick("files", { root = false }))
 -- cmd-shit-f search from cwd
-vim.keymap.set({ "n", "i", "v" }, "<D-S-f>", LazyVim.pick("live_grep", { root = false }))
+-- vim.keymap.set({ "n", "i", "v" }, "<D-S-f>", LazyVim.pick("live_grep", { root = false }))
+vim.keymap.set({ "n", "i", "v" }, "<D-S-f>", function()
+  require("telescope").extensions.live_grep_args.live_grep_args()
+end)
 -- Alt-Left
 vim.keymap.set("n", "<A-Left>", "b")
 vim.keymap.set("n", "<A-Right>", "w")
