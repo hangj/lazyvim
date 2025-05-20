@@ -2,6 +2,13 @@
 -- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
 -- Add any additional keymaps here
 
+-- Shift: <S>
+-- Command: <D>
+-- Control: <C>
+-- Option/Alt: <A>
+-- arrow left/right/up/down: <Left> <Right> <Up> <Down>
+-- mouse left/right/middle: <LeftMouse> <RightMouse> <MiddleMouse>
+
 if vim.g.neovide then
   vim.keymap.set("n", "<D-s>", ":w<CR>") -- Save
   vim.keymap.set("i", "<D-s>", "<CMD>w<CR>") -- Save
