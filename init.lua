@@ -3,6 +3,12 @@ local argv = vim.v.argv
 local cwd = vim.fn.getcwd()
 vim.api.nvim_set_current_dir(vim.env.PWD)
 
+-- respect ~/.vimrc
+local vimrc = vim.fn.expand("~/.vimrc")
+if vim.fn.filereadable(vimrc) ~= 0 then
+  -- vim.cmd("source " .. vimrc)
+end
+
 -- log al the keymaps
 -- local set = vim.keymap.set
 -- local log = io.open(vim.fs.abspath("~/dev/tmp/nvim-keymap.log"), "w+")

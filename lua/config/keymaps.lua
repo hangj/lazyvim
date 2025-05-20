@@ -11,7 +11,7 @@
 
 if vim.g.neovide then
   vim.keymap.set("n", "<D-s>", ":w<CR>") -- Save
-  vim.keymap.set("i", "<D-s>", "<CMD>w<CR>") -- Save
+  vim.keymap.set("i", "<D-s>", "<CMD>w<CR><ESC>") -- Save
   vim.keymap.set("v", "<D-c>", '"+y') -- Copy
   vim.keymap.set("n", "<D-v>", '"+P') -- Paste normal mode
   vim.keymap.set("v", "<D-v>", '"+P') -- Paste visual mode
@@ -24,6 +24,13 @@ vim.api.nvim_set_keymap("", "<D-v>", "+p<CR>", { noremap = true, silent = true }
 vim.api.nvim_set_keymap("!", "<D-v>", "<C-R>+", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("t", "<D-v>", "<C-R>+", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("v", "<D-v>", "<C-R>+", { noremap = true, silent = true })
+
+-- copy current file path to system pasteboard
+vim.keymap.set("n", "<leader>yp", function()
+  local file = vim.fn.expand("%:p")
+  vim.fn.system("pbcopy", file)
+  vim.notify(file)
+end, { desc = "copy current file path" })
 
 -- command-left/right goto start/end of current line
 vim.keymap.set("i", "<D-Right>", "<ESC>A")
@@ -75,7 +82,7 @@ vim.keymap.set("n", "<A-Left>", "b")
 vim.keymap.set("n", "<A-Right>", "w")
 
 -- rename the variable name
-vim.keymap.set("n", "<leader>r", vim.lsp.buf.rename)
+vim.keymap.set("n", "<leader>r", vim.lsp.buf.rename, { desc = "rename variable" })
 
 -- new file
 vim.keymap.set({ "n", "i", "v" }, "<D-t>", "<cmd>enew<cr>")
