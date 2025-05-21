@@ -46,6 +46,8 @@ vim.keymap.set("v", "<S-D-Right>", "$")
 vim.keymap.set("v", "<S-D-Left>", "^")
 vim.keymap.set("v", "<S-A-Right>", "e")
 vim.keymap.set("v", "<S-A-Left>", "b")
+vim.keymap.set("n", "<S-A-Right>", "ve")
+vim.keymap.set("i", "<S-A-Right>", "<ESC>lve")
 
 vim.keymap.set("i", "<S-D-Cr>", "<ESC>O")
 
@@ -63,11 +65,11 @@ vim.keymap.set({ "i", "n", "v" }, "<A-D-Left>", "<CMD>bprevious<CR>")
 -- vim.keymap.set({ "i", "n", "v" }, "<C-Tab>", "<CMD>e #<CR>")
 local mreb = _G.MostRecentEnteredBuffers
 vim.keymap.set({ "i", "n", "v" }, "<C-Tab>", function()
-  if #mreb < 2 then
+  if #mreb < 1 then
     return
   end
-  local buf = mreb[#mreb - 1]
-  vim.cmd("b " .. buf)
+  local buf = mreb[#mreb]
+  pcall(vim.cmd, "b " .. buf)
 end)
 
 -- command-p search from cwd

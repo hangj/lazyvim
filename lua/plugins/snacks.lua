@@ -9,7 +9,7 @@ return {
     -- refer to the configuration section below
     bigfile = { enabled = true },
     dashboard = { enabled = true },
-    explorer = { enabled = true, hidden = true, ignored = true },
+    explorer = { enabled = true, hidden = true, ignored = false },
     indent = { enabled = true },
     input = { enabled = true },
     picker = {
@@ -17,14 +17,14 @@ return {
       sources = {
         files = {
           hidden = true,
-          ignored = true,
+          -- ignored = true,
           -- exclude = {
           -- "**/.git/*",
           --},
         },
       },
       hidden = true,
-      ignored = true,
+      -- ignored = true,
     },
     notifier = { enabled = true },
     quickfile = { enabled = true },

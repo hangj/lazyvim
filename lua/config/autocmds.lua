@@ -61,10 +61,17 @@ vim.api.nvim_create_autocmd("BufAdd", {
   end,
 })
 
-vim.api.nvim_create_autocmd("BufEnter", {
-  group = vim.api.nvim_create_augroup("hangj_bufenter", { clear = true }),
+-- vim.api.nvim_create_autocmd("BufEnter", {
+--   group = vim.api.nvim_create_augroup("hangj_bufenter", { clear = true }),
+--   callback = function(e)
+--     vim.print("enter:", mreb)
+--   end,
+-- })
+
+vim.api.nvim_create_autocmd("BufLeave", {
+  group = vim.api.nvim_create_augroup("hangj_bufleave", { clear = true }),
   callback = function(e)
     arr_append(mreb, e.buf)
-    -- vim.print(e)
+    -- vim.print("leave:", mreb)
   end,
 })
