@@ -70,7 +70,7 @@ vim.keymap.set({ "i", "n", "v" }, "<C-Tab>", function()
   end
   local buf = mreb[#mreb]
   pcall(vim.cmd, "b " .. buf)
-end)
+end, { desc = "jump to previous buffer" })
 
 -- command-p search from cwd
 vim.keymap.set({ "n", "i", "v" }, "<D-p>", LazyVim.pick("files", { root = false }))
@@ -82,6 +82,9 @@ end)
 -- Alt-Left
 vim.keymap.set("n", "<A-Left>", "b")
 vim.keymap.set("n", "<A-Right>", "w")
+
+local builtin = require("telescope.builtin")
+vim.keymap.set({ "n", "i", "v" }, "<D-r>", builtin.treesitter, { desc = "list function names" })
 
 -- rename the variable name
 vim.keymap.set("n", "<leader>r", vim.lsp.buf.rename, { desc = "rename variable" })

@@ -6,6 +6,7 @@
 --
 -- Or remove existing autocmds by their group name (which is prefixed with `lazyvim_` for the defaults)
 -- e.g. vim.api.nvim_del_augroup_by_name("lazyvim_wrap_spell")
+require("config.mycmds")
 
 _G.MostRecentClosedBuffers = _G.MostRecentClosedBuffers or {}
 local mrcb = _G.MostRecentClosedBuffers
@@ -61,12 +62,13 @@ vim.api.nvim_create_autocmd("BufAdd", {
   end,
 })
 
--- vim.api.nvim_create_autocmd("BufEnter", {
---   group = vim.api.nvim_create_augroup("hangj_bufenter", { clear = true }),
---   callback = function(e)
---     vim.print("enter:", mreb)
---   end,
--- })
+vim.api.nvim_create_autocmd("BufEnter", {
+  group = vim.api.nvim_create_augroup("hangj_bufenter", { clear = true }),
+  callback = function(e)
+    -- vim.print("enter:", mreb)
+    arr_rm(mreb, e.buf)
+  end,
+})
 
 vim.api.nvim_create_autocmd("BufLeave", {
   group = vim.api.nvim_create_augroup("hangj_bufleave", { clear = true }),
