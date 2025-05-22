@@ -51,6 +51,9 @@ vim.api.nvim_create_autocmd("BufDelete", {
     -- }
     -- vim.print(e)
     -- print("fuck")
+    if vim.fn.buflisted(e.buf) ~= 1 then
+      return
+    end
     arr_append(mrcb, e.file)
     arr_rm(mreb, e.buf)
   end,
@@ -73,6 +76,9 @@ vim.api.nvim_create_autocmd("BufEnter", {
 vim.api.nvim_create_autocmd("BufLeave", {
   group = vim.api.nvim_create_augroup("hangj_bufleave", { clear = true }),
   callback = function(e)
+    if vim.fn.buflisted(e.buf) ~= 1 then
+      return
+    end
     arr_append(mreb, e.buf)
     -- vim.print("leave:", mreb)
   end,
