@@ -51,6 +51,7 @@ vim.api.nvim_create_autocmd("BufDelete", {
     -- }
     -- vim.print(e)
     -- print("fuck")
+    -- vim.api.nvim_list_bufs() -- :ls
     if vim.fn.buflisted(e.buf) ~= 1 then
       return
     end

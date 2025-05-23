@@ -49,6 +49,7 @@ vim.keymap.set("v", "<S-A-Left>", "b")
 vim.keymap.set("n", "<S-A-Right>", "ve")
 vim.keymap.set("i", "<S-A-Right>", "<ESC>lve")
 
+vim.keymap.set("i", "<D-Cr>", "<ESC>o")
 vim.keymap.set("i", "<S-D-Cr>", "<ESC>O")
 
 vim.keymap.set({ "n", "i" }, "<D-/>", "<ESC>gcc", { remap = true }) -- comment line
