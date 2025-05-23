@@ -38,7 +38,14 @@ vim.keymap.set("i", "<D-Left>", "<ESC>I")
 vim.keymap.set("i", "<S-D-Right>", "<ESC>lv$")
 vim.keymap.set("i", "<S-D-Left>", "<ESC>v^")
 vim.keymap.set("n", "<D-Right>", "$")
-vim.keymap.set("n", "<D-Left>", "^")
+vim.keymap.set("n", "<D-Left>", function()
+  -- move to the first non-blank character first(^), or to the first character of the line(0)
+  local line = vim.api.nvim_get_current_line()
+  local s, _ = line:find("[^%s]")
+  local col = vim.fn.getcurpos()[3]
+  local cmd = col == s and "norm! 0" or "norm! ^"
+  vim.cmd(cmd)
+end)
 vim.keymap.set("n", "<S-D-Right>", "v$")
 vim.keymap.set("n", "<S-D-Left>", "v^")
 
