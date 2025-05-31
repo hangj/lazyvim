@@ -20,7 +20,32 @@ if vim.g.neovide then
   vim.keymap.set("n", "<D-v>", '"+P') -- Paste normal mode
   vim.keymap.set("v", "<D-v>", '"+P') -- Paste visual mode
   vim.keymap.set("c", "<D-v>", "<C-R>+") -- Paste command mode
-  vim.keymap.set("i", "<D-v>", '<ESC>l"+Pli') -- Paste insert mode
+  vim.keymap.set("i", "<D-v>", function()
+    local text = vim.fn.getreg("+")
+    if text:len() == 0 then
+      return
+    end
+
+    local buf, row, col, _ = unpack(vim.fn.getpos("."))
+
+    local replacement = {}
+    for t in text:gmatch("[^\n]+") do
+      table.insert(replacement, t)
+    end
+
+    local len
+    local line
+    if #replacement == 1 then
+      len = col + replacement[1]:len()
+      line = row
+    else
+      line = row + #replacement - 1
+      len = replacement[#replacement]:len() + 1
+    end
+    vim.api.nvim_buf_set_text(buf, row - 1, col - 1, row - 1, col - 1, replacement)
+    vim.fn.cursor(line, len)
+  end) -- Paste insert mode
+  vim.keymap.set("n", "<D-x>", '"+d') -- Cut
 end
 
 if vim.g.neovide then
@@ -47,8 +72,8 @@ vim.keymap.set("i", "<D-Right>", "<ESC>A")
 vim.keymap.set("i", "<D-Left>", "<ESC>I")
 vim.keymap.set("i", "<S-D-Right>", "<ESC>lv$")
 vim.keymap.set("i", "<S-D-Left>", "<ESC>v^")
-vim.keymap.set("n", "<D-Right>", "$")
-vim.keymap.set("n", "<D-Left>", function()
+vim.keymap.set({ "n", "v" }, "<D-Right>", "$")
+vim.keymap.set({ "n", "v" }, "<D-Left>", function()
   -- move to the first non-blank character first(^), or to the first character of the line(0)
   local line = vim.api.nvim_get_current_line()
   local s, _ = line:find("[^%s]")
@@ -58,6 +83,21 @@ vim.keymap.set("n", "<D-Left>", function()
 end)
 vim.keymap.set("n", "<S-D-Right>", "v$")
 vim.keymap.set("n", "<S-D-Left>", "v^")
+
+vim.keymap.set({ "n", "v" }, "<D-f>", "*")
+-- vim.keymap.set("v", "<D-f>", function()
+--   local buf, row, col, _ = unpack(vim.fn.getpos("."))
+--   local _, v_row, v_col, _ = unpack(vim.fn.getpos("v"))
+--   if row ~= v_row then
+--     vim.notify("Please select text in the same line", vim.log.levels.WARN)
+--     return
+--   end
+--
+--   --  Indexing is zero-based. Row indices are end-inclusive, and column indices are end-exclusive.
+--   local x = vim.api.nvim_buf_get_text(buf, row - 1, math.min(col, v_col) - 1, row - 1, math.max(col, v_col), {})
+--   -- local r = vim.fn.search(x[1], "cn")
+--   vim.cmd("g/" .. x[1])
+-- end)
 
 vim.keymap.set("v", "<S-D-Right>", "$")
 vim.keymap.set("v", "<S-D-Left>", "^")
