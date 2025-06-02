@@ -83,7 +83,18 @@ local function v_surround(char1, char2)
   --  Indexing is zero-based. Row indices are end-inclusive, and column indices are end-exclusive.
   vim.api.nvim_buf_set_text(buf, e_row - 1, e_col, e_row - 1, e_col, { char2 })
   vim.api.nvim_buf_set_text(buf, b_row - 1, b_col - 1, b_row - 1, b_col - 1, { char1 })
-  vim.fn.cursor(e_row, e_col + 2)
+  -- vim.fn.cursor(e_row, e_col + 2)
+  -- vim.cmd("normal! <esc>")
+
+  --  local timer = vim.loop.new_timer()
+  -- timer:start(50, 0, vim.schedule_wrap(function ()
+  -- 	assert.are.equal("v", vim.fn.mode())
+  -- vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, false, true), 'x', true)
+  -- end))
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>l", true, false, true), "x", true)
+  -- https://stackoverflow.com/questions/11767956/how-do-i-move-the-cursor-to-a-specific-row-and-column
+  -- vim.cmd("89")
+  -- vim.cmd("normal! 20|vll")
 end
 
 local pair_chars = {
