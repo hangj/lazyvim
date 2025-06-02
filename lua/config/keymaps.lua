@@ -54,6 +54,9 @@ if vim.g.neovide then
   vim.keymap.set({ "n", "v" }, "<C-0>", ":lua vim.g.neovide_scale_factor = 1<CR>")
 end
 
+
+vim.keymap.set("v", '"', [[<cmd>'<,'>s/\%V\(.*\%V.\)/"\1"/<cr>]], {silent=true})
+
 -- Allow clipboard copy paste in neovim
 -- vim.api.nvim_set_keymap("", "<D-v>", "+p<CR>", { noremap = true, silent = true })
 -- vim.api.nvim_set_keymap("!", "<D-v>", "<C-R>+", { noremap = true, silent = true })
