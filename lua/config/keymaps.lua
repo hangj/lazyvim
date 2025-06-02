@@ -26,24 +26,26 @@ if vim.g.neovide then
       return
     end
 
-    local buf, row, col, _ = unpack(vim.fn.getpos("."))
+    vim.api.nvim_paste(text, false, -1)
 
-    local replacement = {}
-    for t in text:gmatch("[^\n]+") do
-      table.insert(replacement, t)
-    end
-
-    local len
-    local line
-    if #replacement == 1 then
-      len = col + replacement[1]:len()
-      line = row
-    else
-      line = row + #replacement - 1
-      len = replacement[#replacement]:len() + 1
-    end
-    vim.api.nvim_buf_set_text(buf, row - 1, col - 1, row - 1, col - 1, replacement)
-    vim.fn.cursor(line, len)
+    -- local buf, row, col, _ = unpack(vim.fn.getpos("."))
+    --
+    -- local replacement = {}
+    -- for t in text:gmatch("[^\n]+") do
+    --   table.insert(replacement, t)
+    -- end
+    --
+    -- local len
+    -- local line
+    -- if #replacement == 1 then
+    --   len = col + replacement[1]:len()
+    --   line = row
+    -- else
+    --   line = row + #replacement - 1
+    --   len = replacement[#replacement]:len() + 1
+    -- end
+    -- vim.api.nvim_buf_set_text(buf, row - 1, col - 1, row - 1, col - 1, replacement)
+    -- vim.fn.cursor(line, len)
   end) -- Paste insert mode
   vim.keymap.set("n", "<D-x>", '"+d') -- Cut
 end
@@ -54,8 +56,48 @@ if vim.g.neovide then
   vim.keymap.set({ "n", "v" }, "<C-0>", ":lua vim.g.neovide_scale_factor = 1<CR>")
 end
 
+local function v_surround(char1, char2)
+  local buf, row, col, _ = unpack(vim.fn.getpos("."))
+  local _, v_row, v_col, _ = unpack(vim.fn.getpos("v"))
+  local b_row, e_row, b_col, e_col
+  if row > v_row then
+    b_row = v_row
+    b_col = v_col
+    e_row = row
+    e_col = col
+  elseif row < v_row then
+    b_row = row
+    b_col = col
+    e_row = v_row
+    e_col = v_col
+  else
+    b_row = row
+    e_row = row
+    b_col = math.min(col, v_col)
+    e_col = math.max(col, v_col)
+  end
 
-vim.keymap.set("v", '"', [[<cmd>'<,'>s/\%V\(.*\%V.\)/"\1"/<cr>]], {silent=true})
+  --  Indexing is zero-based. Row indices are end-inclusive, and column indices are end-exclusive.
+  vim.api.nvim_buf_set_text(buf, e_row - 1, e_col, e_row - 1, e_col, { char2 })
+  vim.api.nvim_buf_set_text(buf, b_row - 1, b_col - 1, b_row - 1, b_col - 1, { char1 })
+end
+
+local pair_chars = {
+  { '"', '"' },
+  { "'", "'" },
+  { "[", "]" },
+  { "{", "}" },
+  { "<", ">" },
+}
+
+for k, v in pairs(pair_chars) do
+  vim.keymap.set("v", v[1], function()
+    v_surround(v[1], v[2])
+  end, { desc = "surround with " .. v[1] .. v[2] })
+  vim.keymap.set("v", v[2], function()
+    v_surround(v[1], v[2])
+  end, { desc = "surround with " .. v[1] .. v[2] })
+end
 
 -- Allow clipboard copy paste in neovim
 -- vim.api.nvim_set_keymap("", "<D-v>", "+p<CR>", { noremap = true, silent = true })
@@ -141,8 +183,8 @@ vim.keymap.set({ "n", "i", "v" }, "<D-S-f>", function()
   require("telescope").extensions.live_grep_args.live_grep_args()
 end)
 -- Alt-Left
-vim.keymap.set("n", "<A-Left>", "b")
-vim.keymap.set("n", "<A-Right>", "w")
+vim.keymap.set({ "n", "v" }, "<A-Left>", "b")
+vim.keymap.set({ "n", "v" }, "<A-Right>", "e")
 
 local builtin = require("telescope.builtin")
 vim.keymap.set({ "n", "i", "v" }, "<D-r>", builtin.treesitter, { desc = "list function names" })
