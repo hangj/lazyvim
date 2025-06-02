@@ -57,6 +57,9 @@ if vim.g.neovide then
 end
 
 local function v_surround(char1, char2)
+  if vim.fn.mode() ~= "v" then
+    return
+  end
   local buf, row, col, _ = unpack(vim.fn.getpos("."))
   local _, v_row, v_col, _ = unpack(vim.fn.getpos("v"))
   local b_row, e_row, b_col, e_col
@@ -80,6 +83,7 @@ local function v_surround(char1, char2)
   --  Indexing is zero-based. Row indices are end-inclusive, and column indices are end-exclusive.
   vim.api.nvim_buf_set_text(buf, e_row - 1, e_col, e_row - 1, e_col, { char2 })
   vim.api.nvim_buf_set_text(buf, b_row - 1, b_col - 1, b_row - 1, b_col - 1, { char1 })
+  vim.fn.cursor(e_row, e_col + 2)
 end
 
 local pair_chars = {
@@ -88,6 +92,7 @@ local pair_chars = {
   { "[", "]" },
   { "{", "}" },
   { "<", ">" },
+  { "(", ")" },
 }
 
 for k, v in pairs(pair_chars) do
