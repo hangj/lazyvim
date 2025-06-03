@@ -60,60 +60,57 @@ local function v_surround(char1, char2)
   if vim.fn.mode() ~= "v" then
     return
   end
-  local buf, row, col, _ = unpack(vim.fn.getpos("."))
-  local _, v_row, v_col, _ = unpack(vim.fn.getpos("v"))
+  local buf, line, col, _ = unpack(vim.fn.getpos("."))
+  local _, v_line, v_col, _ = unpack(vim.fn.getpos("v"))
   local max_cursor_col = vim.fn.col("$") -- the end of cursor line
-  if row == v_row and col == v_col then
+  if line == v_line and col == v_col and col >= max_cursor_col then
+    -- empty line
     return
   end
   if col >= max_cursor_col then
     col = max_cursor_col - 1
   end
-  local b_row, e_row, b_col, e_col, cursor_end
-  if row > v_row then
-    b_row = v_row
+  local b_line, e_line, b_col, e_col, cursor_end
+  if line > v_line then
+    b_line = v_line
     b_col = v_col
-    e_row = row
+    e_line = line
     e_col = col
     cursor_end = true
-  elseif row < v_row then
-    b_row = row
+  elseif line < v_line then
+    b_line = line
     b_col = col
-    e_row = v_row
+    e_line = v_line
     e_col = v_col
     cursor_end = false
   else
-    b_row = row
-    e_row = row
+    b_line = line
+    e_line = line
     b_col = math.min(col, v_col)
     e_col = math.max(col, v_col)
     cursor_end = col == e_col
   end
 
-  if b_row == e_row and b_col == e_col then
-    return
-  end
-  -- vim.print(b_row, b_col, e_row, e_col)
-
-  -- local text = vim.api.nvim_buf_get_text(buf, b_row - 1, b_col - 1, e_row - 1, e_col, {})
+  -- local text = vim.api.nvim_buf_get_text(buf, b_line - 1, b_col - 1, e_line - 1, e_col, {})
   -- vim.print(text)
   -- text[1] = char1 .. text[1]
   -- text[#text] = text[#text] .. char2
-  -- vim.api.nvim_buf_set_text(buf, b_row - 1, b_col - 1, e_row - 1, e_col, text)
+  -- vim.api.nvim_buf_set_text(buf, b_line - 1, b_col - 1, e_line - 1, e_col, text)
 
   --  Indexing is zero-based. Row indices are end-inclusive, and column indices are end-exclusive.
-  vim.api.nvim_buf_set_text(buf, e_row - 1, e_col, e_row - 1, e_col, { char2 })
-  vim.api.nvim_buf_set_text(buf, b_row - 1, b_col - 1, b_row - 1, b_col - 1, { char1 })
-  -- vim.fn.cursor(e_row, e_col + 2)
+  vim.api.nvim_buf_set_text(buf, e_line - 1, e_col, e_line - 1, e_col, { char2 })
+  vim.api.nvim_buf_set_text(buf, b_line - 1, b_col - 1, b_line - 1, b_col - 1, { char1 })
+  -- vim.fn.cursor(e_line, e_col + 2)
   -- vim.cmd("normal! <esc>")
 
-  if cursor_end then
-    vim.fn.cursor(e_row, e_col + 2)
+  if b_line == e_line then
+    vim.fn.cursor(e_line, e_col + char1:len() + char2:len())
   else
-    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, false, true), "x", true)
-    vim.fn.cursor(e_row, e_col + 2)
-    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("v", true, false, true), "x", true)
-    vim.fn.cursor(b_row, b_col)
+    vim.fn.cursor(e_line, e_col + char2:len())
+  end
+  if not cursor_end then
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>v", true, false, true), "x", true)
+    vim.fn.cursor(b_line, b_col)
   end
 
   -- local timer = vim.loop.new_timer()
@@ -134,6 +131,9 @@ local pair_chars = {
   { "{", "}" },
   { "<", ">" },
   { "(", ")" },
+
+  { "“", "”" },
+  { "‘", "’" },
 }
 
 for _, v in pairs(pair_chars) do
